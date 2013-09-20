@@ -23,7 +23,7 @@ CFLAGS =	-O $(SRANDOM_DEFS) $(SSL_DEFS) $(SSL_INC)
 LDFLAGS =	-s $(SSL_LIBS) $(SYSV_LIBS)
 #LDFLAGS =	-g $(SSL_LIBS) $(SYSV_LIBS)
 
-all:		http_load
+all:		http_load http_load_gz
 
 http_load:	http_load.o timers.o
 	$(CC) $(CFLAGS) http_load.o timers.o $(LDFLAGS) -o http_load
@@ -31,12 +31,20 @@ http_load:	http_load.o timers.o
 http_load.o:	http_load.c timers.h port.h
 	$(CC) $(CFLAGS) -c http_load.c
 
+http_load_gz:	http_load_gz.o timers.o
+	$(CC) $(CFLAGS) http_load_gz.o timers.o $(LDFLAGS) -o http_load_gz
+
+http_load_gz.o:	http_load_gz.c timers.h port.h
+	$(CC) $(CFLAGS) -c http_load_gz.c
+
 timers.o:	timers.c timers.h
 	$(CC) $(CFLAGS) -c timers.c
 
 install:	all
 	rm -f $(BINDIR)/http_load
 	cp http_load $(BINDIR)
+	rm -f $(BINDIR)/http_load_gz
+	cp http_load_gz $(BINDIR)
 	rm -f $(MANDIR)/http_load.1
 	cp http_load.1 $(MANDIR)
 
